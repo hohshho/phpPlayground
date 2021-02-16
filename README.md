@@ -17,7 +17,7 @@
 **아파치와 php7는 라이브러리 충돌 및 오류 때문에 잘 쓰이지 않음**
 
 1. WNMP 설치
-2. {설치경로}/conf/nginx/nginx.conf - root directory 변경
+2. {설치경로}/conf/nginx/nginx.conf - root directory 변경  
 [참고 블로그](https://niceman.tistory.com/135)
 
 ## Vitual Machine 환경 설정
@@ -29,24 +29,25 @@
 sudo systemctl set-default multi-user.target
 ```
 
-2. putty로 vitual box 연결
+2. putty로 vitual box 연결  
 [참고 블로그](https://m.blog.naver.com/skddms/220575084716)  
 
-3. vim 설정
+3. vim 설정  
 [참고 블로그](https://hyoje420.tistory.com/51)  
 
 4. nginx 설치 및 환경설정
 
-5. php 설치 및 환경설정
+5. php 설치 및 환경설정  
 [참고 블로그](https://www.manualfactory.net/10903)
 
-Tip!!
+**Tip!!**
 ```
 tail -f /var/log/nginx/error.log 
 ```
 이 명령어로 error log확인 가능!
 
 # codeigniter3
+[codeigniter 생활코딩 강의](https://opentutorials.org/course/697/3824)  
 
 ## MVC 내용 정리
 
@@ -84,8 +85,8 @@ dbdriver : 데이터베이스의 종류로 지원되는 드라이브의 목록�
 
 
 
-## Tip!! 강의 예제 실행 중 오류
-
+**Tip!!**
+ 강의 예제 실행 중 오류
 > localhost/index.php/topic 404에러
 
 {nginx설치 경로}/conf/nginx.conf sever설정에 아래 코드 추가 
@@ -95,3 +96,14 @@ if (!-e $request_filename ) {
 	rewrite ^(.*)$ /index.php last;
 }
 ```
+
+
+
+# PHP 문법
+
+
+# PHP 객체 지향 프로그래밍
+
+
+# PHP + MySQL
+
