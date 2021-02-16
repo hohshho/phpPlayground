@@ -1,8 +1,6 @@
 # PHP Playground
----
 
 ## 강의
----
 
 [Codeigniter - 생활코딩](https://opentutorials.org/course/697/3829)  
 [WEB2-PHP - 생활코딩](https://www.youtube.com/watch?v=Qh_6JheU_gY&list=PLuHgQVnccGMAMMNByX8Bf1BkVrShBhj1I)  
@@ -11,13 +9,10 @@
 
 위 강의를 듣고 공부한 소스 및 내용 정리
 
----
 
 # WEB2-PHP
----
 
 ## Window PHP 환경 설정
----
 
 **아파치와 php7는 라이브러리 충돌 및 오류 때문에 잘 쓰이지 않음**
 
@@ -26,7 +21,6 @@
 [참고 블로그](https://niceman.tistory.com/135)
 
 ## Vitual Machine 환경 설정
----
 
 
 1. 텍스트 모드 부팅 설정
@@ -53,10 +47,8 @@ tail -f /var/log/nginx/error.log
 이 명령어로 error log확인 가능!
 
 # codeigniter3
----
 
 ## MVC 내용 정리
----
 
 ## Controller
 
@@ -93,7 +85,7 @@ dbdriver : 데이터베이스의 종류로 지원되는 드라이브의 목록�
 
 
 ## Tip!! 강의 예제 실행 중 오류
----
+
 > localhost/index.php/topic 404에러
 
 {nginx설치 경로}/conf/nginx.conf sever설정에 아래 코드 추가 
