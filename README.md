@@ -25,9 +25,6 @@
 2. {설치경로}/conf/nginx/nginx.conf - root directory 변경
 [참고 블로그](https://niceman.tistory.com/135)
 
-
-?? 아파치대신 nginx 쓰는 이유가 라이브러리 충돌 및 오류 때문 or nginx가 대규모 작업에 좋아서라고 알고있는데 이유가 뭐임?
-
 ## Vitual Machine 환경 설정
 ---
 
@@ -48,8 +45,6 @@ sudo systemctl set-default multi-user.target
 
 5. php 설치 및 환경설정
 [참고 블로그](https://www.manualfactory.net/10903)
-
-6. 
 
 Tip!!
 ```
