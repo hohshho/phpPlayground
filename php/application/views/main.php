@@ -1,1 +1,3 @@
-토픽 메인 페이지
+<div class="span10">
+     
+</div>

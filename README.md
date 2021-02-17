@@ -29,6 +29,7 @@
 ## Vitual Machine 환경 설정
 
 실행 방법
+
 ```
 1. PHP-fpm 실행
 2. nginx 실행
@@ -39,6 +40,7 @@
  - Nginx 자동 시작 : systemctl enable nginx
 3. SQLite 실행
 ```
+
 **Tip!!**
  - 설정파일 이상 여부 검사 : nginx -t
  - error log확인 : tail -f /var/log/nginx/error.log 
@@ -78,6 +80,7 @@ sudo systemctl set-default multi-user.target
 ## CI URL
 
 새그먼트 기반 URL 사용
+
 ```
 example.com/news/article/my_article
 {호스트 주소}/{호출될 Controller}/{클래스 안의 호출될 Function}/{변수}
@@ -92,6 +95,8 @@ example.com/news/article/my_article
 3. Controller : Model과 View사에 동작
 
 ![](./image/phpMVCpattrenEx.gif)
+
+<!-- TODO : 파일 구조 설명 -->
 
 ## Controller
 > URL과 상호작용하는 클래스 파일
@@ -206,6 +211,23 @@ if (!-e $request_filename ) {
 	rewrite ^(.*)$ /index.php last;
 }
 ```
+
+## Helper
+> 자주 사용하는 로직을 재활용 할 수 있게 만드는 Library
+
+1. 기본적인 로드 방법
+```
+$this->load->helper('헬퍼 이름')
+```
+
+2. 복수의 헬퍼를 로드하기 위한 방법
+```
+$this->load->helper(array('헬퍼1의 이름', '헬퍼2의 이름'));
+```
+
+
+<!-- TODO :  -->
+
 
 # PHP 문법
 
