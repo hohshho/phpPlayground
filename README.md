@@ -14,6 +14,12 @@
 
 ## Window PHP 환경 설정
 
+실행 방법
+```
+1. Wnmp 실행
+2. Application 실행
+```
+
 **아파치와 php7는 라이브러리 충돌 및 오류 때문에 잘 쓰이지 않음**
 
 1. WNMP 설치
@@ -22,6 +28,20 @@
 
 ## Vitual Machine 환경 설정
 
+실행 방법
+```
+1. PHP-fpm 실행
+2. nginx 실행
+ - Nginx 실행 : systemctl start nginx
+ - Nginx 중단 : systemctl stop nginx
+ - Nginx 재시작 : systemctl restart nginx / nginx 서버 중단 후 재가동
+ - Nginx 리로드 : systemctl reload nginx / 설정만 다시 적용
+ - Nginx 자동 시작 : systemctl enable nginx
+3. SQLite 실행
+```
+**Tip!!**
+ - 설정파일 이상 여부 검사 : nginx -t
+ - error log확인 : tail -f /var/log/nginx/error.log 
 
 1. 텍스트 모드 부팅 설정
 
@@ -39,12 +59,6 @@ sudo systemctl set-default multi-user.target
 
 5. php 설치 및 환경설정  
 [참고 블로그](https://www.manualfactory.net/10903)
-
-**Tip!!**
-```
-tail -f /var/log/nginx/error.log 
-```
-이 명령어로 error log확인 가능!
 
 # codeigniter3
 [codeigniter 생활코딩 강의](https://opentutorials.org/course/697/3824)  
@@ -77,8 +91,13 @@ example.com/news/article/my_article
 2. View : 사용자에게 보여질 화면
 3. Controller : Model과 View사에 동작
 
-## Controller
+![](./image/phpMVCpattrenEx.gif)
 
+## Controller
+> URL과 상호작용하는 클래스 파일
+
+### 특징
+ - 클래스 명은 항상 **대문자로 시작**
 
 **Tip!!**
 $this, self, -> 차이
@@ -86,9 +105,14 @@ $this, self, -> 차이
 
 [참고 블로그](https://m.blog.naver.com/PostView.nhn?blogId=vefe&logNo=221454883593&proxyReferer=https:%2F%2Fwww.google.com%2F)
 
+## Route
+> application/config/routes.php에 작성
+<!-- TODO : 생활코딩 강의 -> ref문서 정리 -->
+
 ## View
 
 ## Model
+> Model은 데이터를 가져오는 로직을 메소드로 정의, Controller를 통해 사용된다.
 
 ### 데이터 베이스 설정
 
@@ -111,16 +135,67 @@ dbdriver : 데이터베이스의 종류로 지원되는 드라이브의 목록�
 2. controller 내에서 $this->load->database()를 호출한다.
 ```
 
-
-
 ### Model 파일 생성 규칙
- - application/models/{모델 명_model}.php 형식으로 생성
+ - **application/models/{모델 명_model}.php** 형식으로 생성
  - 파일은 **CI_Model 클래스 상속**
  - 클래스 명은 **대문자로 시작**
 
+### Model load
 
+1. Model load
+ - 형식
+```
+$this->load->model('소문자로된 모델 클래스 명');
+```
+ - 예제
+```
+$this->load->model('topic_model');
+```
 
-**Tip!!**
+2. Model call
+ - 형식
+```
+모델 클래스 명 -> 메소드 명
+```
+ - 예제
+```
+$topics = $this -> topic_model -> gets();
+```
+
+### Model 내 쿼리 사용
+> $this->db 이용!
+
+- 사용 예제 
+```
+$query - $this->db->query('SELECT name, title, email FROM my_table');
+
+foreach($query->result() as $row) {
+   echo $row->title;
+   echo $row->name;
+   echo $row->email;
+}
+
+echo 'Total Results: ' . $query->num_rows();
+```
+
+#### 결과 불러오기
+> **객체 배열 리턴**한다.
+
+1. 다중 결과(객체)
+   - result()
+2. 다중 결과(배열)
+   - result_array()
+3. 단일 결과(객체)
+   - row()
+4. 단일 결과(배열)
+   - row_array()
+
+<!-- TODO : 표준 입력 예제, 쿼리 빌더 -->
+<!-- http://www.ciboard.co.kr/user_guide/kr/database/examples.html#standard-insert -->
+
+<!-- TODO : Active Record vs JPA 비교 -->
+
+## Error 해결
  강의 예제 실행 중 오류
 > localhost/index.php/topic 404에러
 
@@ -131,8 +206,6 @@ if (!-e $request_filename ) {
 	rewrite ^(.*)$ /index.php last;
 }
 ```
-
-
 
 # PHP 문법
 
