@@ -225,7 +225,7 @@ $this->load->helper('헬퍼 이름')
 $this->load->helper(array('헬퍼1의 이름', '헬퍼2의 이름'));
 ```
 
-test
+
 <!-- TODO :  -->
 
 
