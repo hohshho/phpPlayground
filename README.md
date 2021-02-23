@@ -1,16 +1,21 @@
 # PHP Playground
 
-## 강의
+<!-- 
+   학습 강의
+   1. nginx 
+   2. php 기본 문법
+   3. php 객체지향
+   4. php + mysql
+ -->
 
-[Codeigniter - 생활코딩](https://opentutorials.org/course/697/3829)  
-[WEB2-PHP - 생활코딩](https://www.youtube.com/watch?v=Qh_6JheU_gY&list=PLuHgQVnccGMAMMNByX8Bf1BkVrShBhj1I)  
-[PHP - 생활코딩](https://www.youtube.com/watch?v=dy9yQIx38u8&list=PLuHgQVnccGMDzq8zAwEY5lvwDWXWTZjB6)  
-[WEB3-PHP&MySQL](https://www.youtube.com/watch?v=NChP-7KMQ_U&list=PLuHgQVnccGMA5836CvWfieEQy0T0ov6Jh)  
+본 포스트는 시리즈로 작성될 예정입니다.
 
-위 강의를 듣고 공부한 소스 및 내용 정리
+1. PHP + Nginx 개발 환경 설정
+2. PHP 언어 학습
+3. codeigniter를 사용한 MVC 구현 방법 학습
+4. codeigniter + php + SQLite + React 게시판 구현
 
-
-# WEB2-PHP
+# 1. Window / Linux 환경 설정
 
 ## Window PHP 환경 설정
 
@@ -28,7 +33,7 @@
 
 ## Vitual Machine 환경 설정
 
-실행 방법
+환경 설정 방법
 
 ```
 1. PHP-fpm 실행
@@ -38,6 +43,7 @@
  - Nginx 재시작 : systemctl restart nginx / nginx 서버 중단 후 재가동
  - Nginx 리로드 : systemctl reload nginx / 설정만 다시 적용
  - Nginx 자동 시작 : systemctl enable nginx
+ - Nginx 상태 : service nginx status
 3. SQLite 실행
 ```
 
@@ -62,8 +68,57 @@ sudo systemctl set-default multi-user.target
 5. php 설치 및 환경설정  
 [참고 블로그](https://www.manualfactory.net/10903)
 
-# codeigniter3
-[codeigniter 생활코딩 강의](https://opentutorials.org/course/697/3824)  
+# 2. Nginx
+
+## CGI(Common Gateway Interface) 란?
+> 웹서버와 외부 프로그램 사이에서 정보를 주고받는 방법과 규약
+
+**이 표준에 맞춰 만들어진 것이 CGI 스크립트이다.**
+
+![](cgipic.PNG)
+
+<!-- TODO : 항목들 정리 -->
+관련 용어
+ - Web Server : 
+ - WAS : 
+
+### 장점
+ - 언어, 플랫폼에 독립적
+ - 매우 단순하고 다른 서버 사이드 프로그래밍 언어에 비해 쉽게 수행
+ - 라이브러리가 풍부하다
+ - 가볍다
+
+### 단점
+ - 느리다(요청이 올 때 마다 DB connection을 새로 열어야 한다)
+<!-- TODO : 확인해보자 -->
+ - HTTP 요청마다 새로운 프로세스를 만들어 서버 메모리를 사용한다
+ - 데이터가 메모리에 캐시될 수 없다.
+
+
+
+
+## FastCGI란?
+> 하나의 큰 프로세스로 동작한다. 이 프로세스가 계속해서 새로운 요청 처리(CGI 단점 해결)
+
+![](fastcgip.PNG)
+
+대부분의 웹서버 **(Nginx, IIS, Apache)** 가 FastCGI를 제공한다.
+
+### 장점
+
+
+
+### 단점
+
+
+## PHP-FPM(Fast Process Manager)
+> PHP를 FastCGI 모드로 동작하게 해준다.
+
+
+
+
+
+# 3. codeigniter3
 
 ## CI 동작
 
@@ -92,7 +147,7 @@ example.com/news/article/my_article
 
 1. Model : 데이터구조 표현, 모델 클래스는 데이터 함수 포함
 2. View : 사용자에게 보여질 화면
-3. Controller : Model과 View사에 동작
+3. Controller : Model과 View사이 동작
 
 ![](./image/phpMVCpattrenEx.gif)
 
@@ -226,14 +281,17 @@ $this->load->helper(array('헬퍼1의 이름', '헬퍼2의 이름'));
 ```
 
 
-<!-- TODO :  -->
-
-
-# PHP 문법
-
-
-# PHP 객체 지향 프로그래밍
-
-
-# PHP + MySQL
-
+# Reference
+![Common Gateway Interface(CGI)란 무엇인가 - bruteforce님 블로그](https://live-everyday.tistory.com/197)  
+![](https://server-talk.tistory.com/308)  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
+![]()  
