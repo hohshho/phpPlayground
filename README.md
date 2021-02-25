@@ -1,20 +1,5 @@
 # PHP Playground
 
-<!-- 
-   학습 강의
-   1. nginx 
-   2. php 기본 문법
-   3. php 객체지향
-   4. php + mysql
- -->
-
-본 포스트는 시리즈로 작성될 예정입니다.
-
-1. PHP + Nginx 개발 환경 설정
-2. PHP 언어 학습
-3. codeigniter를 사용한 MVC 구현 방법 학습
-4. codeigniter + php + SQLite + React 게시판 구현
-
 # 1. Window / Linux 환경 설정
 
 ## Window PHP 환경 설정
@@ -28,8 +13,7 @@
 **아파치와 php7는 라이브러리 충돌 및 오류 때문에 잘 쓰이지 않음**
 
 1. WNMP 설치
-2. {설치경로}/conf/nginx/nginx.conf - root directory 변경  
-[참고 블로그](https://niceman.tistory.com/135)
+2. {설치경로}/conf/nginx/nginx.conf - root directory 변경 
 
 ## Vitual Machine 환경 설정
 
@@ -38,13 +22,12 @@
 ```
 1. PHP-fpm 실행
 2. nginx 실행
- - Nginx 실행 : systemctl start nginx
- - Nginx 중단 : systemctl stop nginx
- - Nginx 재시작 : systemctl restart nginx / nginx 서버 중단 후 재가동
- - Nginx 리로드 : systemctl reload nginx / 설정만 다시 적용
- - Nginx 자동 시작 : systemctl enable nginx
+ - Nginx 실행 : service nginx start 
+ - Nginx 중단 : service nginx stop 
+ - Nginx 재시작 : service nginx restart  / nginx 서버 중단 후 재가동
+ - Nginx 리로드 : service nginx reload  / 설정만 다시 적용
+ - Nginx 자동 시작 : service nginx enable 
  - Nginx 상태 : service nginx status
-3. SQLite 실행
 ```
 
 **Tip!!**
@@ -58,20 +41,36 @@ sudo systemctl set-default multi-user.target
 ```
 
 2. putty로 vitual box 연결  
-[참고 블로그](https://m.blog.naver.com/skddms/220575084716)  
+[putty로 virtualbox 연결하기 - 숭숭이님 블로그](https://m.blog.naver.com/skddms/220575084716)  
 
 3. vim 설정  
-[참고 블로그](https://hyoje420.tistory.com/51)  
+[[Vim]vim 설정하기 - heyhyo님 블로그](https://hyoje420.tistory.com/51)  
 
 4. nginx 설치 및 환경설정
 
 5. php 설치 및 환경설정  
-[참고 블로그](https://www.manualfactory.net/10903)
+[Ubuntu 18.04 / Nginx, PHP, MariaDB 설치하고 설정하기 - manualfactory](https://www.manualfactory.net/10903)
+
+- 1) apt-get install nginx
+- 2) apt-get install php-fpm
+- 3) /etc/nginx/sites-available/default 파일 수정
+```
+# 1. index.php 자동 인식하게 설정
+index index.html index.htm index.nginx-debian.html;
+
+# 2. 설치한 php fpm에 맞게 수정
+location ~ \.php$ {
+  include snippets/fastcgi-php.conf;
+  fastcgi_pass unix:/var/run/php/php7.2-fpm.sock
+}
+```
+
+
 
 # 2. Nginx
 
 ## CGI(Common Gateway Interface) 란?
-> 웹서버와 외부 프로그램 사이에서 정보를 주고받는 방법과 규약
+> 웹서버와 외부 프로그램(C, PHP, Python 등) 사이에서 정보를 주고받는 방법과 규약
 
 **이 표준에 맞춰 만들어진 것이 CGI 스크립트이다.**
 
@@ -91,10 +90,8 @@ sudo systemctl set-default multi-user.target
 ### 단점
  - 느리다(요청이 올 때 마다 DB connection을 새로 열어야 한다)
 <!-- TODO : 확인해보자 -->
- - HTTP 요청마다 새로운 프로세스를 만들어 서버 메모리를 사용한다
+ - HTTP 요청마다 **새로운 프로세스를 만들어** 서버 메모리를 사용한다
  - 데이터가 메모리에 캐시될 수 없다.
-
-
 
 
 ## FastCGI란?
@@ -114,6 +111,153 @@ sudo systemctl set-default multi-user.target
 ## PHP-FPM(Fast Process Manager)
 > PHP를 FastCGI 모드로 동작하게 해준다.
 
+
+## 역할
+1. 정적 파일을 처리하는 **HTTP 서버**로서의 역할
+
+![](webserver.PNG)
+
+2. 응용 프로그램 서버에 요청을 보내는 **리버스 프록시** 역할
+
+![](reverseProxy.PNG)
+
+### 리버스 프록시란?
+ > 클라이언트가 서버에 요청하면, 프록시 서버가 배후 서버(응용프로그램 서버)로부터 데이터를 가져옴
+
+### 리버스 프록시를 쓰는 이유
+ > **프록시 서버를 둠으로써 요청을 배분하는 역할**
+ > cli가 직접 App 서버에 요청하면 프로세스 1개가 응답대기 상태가 되어서 요청에 대한 버퍼링이 생김
+
+### Event-driven 방식
+
+Thread 기반은 하나의 커넥션당 하나의 쓰레드를 사용
+
+Event-driven 방식은 Event Handler를 통해 비동기 방식으로 처리해 먼저 처리되는 것부터 로직이 진행된다.
+
+![](threadp.PNG)
+
+![](eventp.PNG)
+
+
+
+## Nginx 파일 구조
+
+**설정 수정 시 원본을 복사해 보관해 두는 습관 가지자!**
+
+### 설정 파일
+
+두개의 파일을 보며 Nginx 설정에 대해 확인해보자
+> /etc/nginx/nginx.conf
+> /etc/nginx/sites-available/default
+
+#### /etc/nginx/nginx.conf
+```
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+
+events {
+        worker_connections 768;
+        # multi_accept on; #기본값:off
+}
+
+http {
+        sendfile on;
+        tcp_nopush on;
+        tcp_nodelay on;
+        keepalive_timeout 10; #기본값:75
+        types_hash_max_size 2048;
+        server_tokens off;
+
+        server_names_hash_bucket_size 64; #기본값:32
+        server_names_hash_max_size 2048; #기본값:512
+        # server_name_in_redirect off;
+
+        include /etc/nginx/mime.types;
+        default_type application/octet-stream;
+
+        access_log off; log_not_found off;
+        error_log /var/log/nginx/error.log warn;
+
+        include /etc/nginx/conf.d/*.conf;
+        include /etc/nginx/sites-enabled/*;
+}
+
+```
+nginx.conf 파일은 접속자 수, 동작 프로세스 수 등 퍼포먼스에 대한 기본적인 설정 항목
+
+크게 3가지 항목으로 나뉜다.
+
+1. 최상단 (Core 모듈)
+
+user : Nginx 프로세스(워커 프로세스)가 실행되는 권한
+ - nginx는 master process, worker process로 동작한다.
+ - 실질적으로 **worker process가 실직적인 웹서버 역할** 수행
+ - root로 설정되어 있을 경우, 워커 프로세스를 root 권한으로 동작
+   -> 악의적인 사용자가 제어하게 된다면 보안상 위험
+   -> 보통 **www-data, www, nginx**와 같이 계정이 하는 일에 대한 대표성 있는 이름 사용
+   (default 값 - ubuntu : www-data, 기타 nobody )
+   -> 이 계정들은 일반 유저의 권한으로 쉘에 접속 할 수 없어야 안전하다.
+
+ubuntu 에서 계정 생성방법
+```bash
+$ useradd --shell /usr/sbin/nologin www-data
+```
+
+worker_processes : Nginx 프로세스 실행 가능 수
+ - auto일 경우도 있지만, 명시적으로 서버의 코어 수 만큼 할당하는 것이 보통(더 높게도 가능)
+
+pid : Nginx 마스터 프로세스 정보
+
+
+2. events
+
+worker_connections : 몇개의 접속을 동시에 처리할 것인가
+ - worker_processes * worker_connections = **처리 할 수 있는 커넥션의 양**
+ - Tip!!
+   - 여러 자료와 퍼포먼스 테스트를 하며 값을 조정해야 한다.
+
+3. http
+ - keepalive_timeout : 
+ - servers token : 
+ - types_hash_max_size, server_names_hash_bucket_size : 
+
+
+4. 기타
+ - include 옵션 : 
+ - ex) 리버스 프록시를 각 도메인에 설정한다고 했을 때 헤더 처리 옵션등을 conf.d에 넣어두고 불러온다. (nginx.conf 설정 파일이 깔끔해짐)
+   - 리버스 프록시란? : 
+
+
+/etc/nginx/sites-available/default
+```
+server {
+    listen       80;
+    server_name  localhost;
+ 
+    root   /usr/share/nginx/html;
+    location / {
+        index  index.html index.htm index.php;
+    }
+ 
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+
+    location ~ \.php$ {
+        fastcgi_pass   unix:/var/run/php5-fpm.sock;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        include        fastcgi_params;
+    }
+}
+```
+
+
+**설정 파일을 변경하면 nginx에 반영해야 하는데, reload 명령을 이용한다**
+
+### 로그 파일 위치
+> /var/log/nginx
 
 
 
