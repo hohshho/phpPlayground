@@ -51,3 +51,4 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /php/application/react/yarn-error.log*
 
 /php/application/react/.env
+/php/application/react/.gitignore
