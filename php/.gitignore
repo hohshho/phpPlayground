@@ -25,3 +25,29 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/php/application/react/node_modules
+/php/application/react/.pnp
+/php/application/react/.pnp.js
+
+# testing
+/php/application/react/coverage
+
+# production
+/php/application/react/build
+
+# misc
+/php/application/react/.DS_Store
+/php/application/react/.env.local
+/php/application/react/.env.development.local
+/php/application/react/.env.test.local
+/php/application/react/.env.production.local
+
+/php/application/react/npm-debug.log*
+/php/application/react/yarn-debug.log*
+/php/application/react/yarn-error.log*
+
+/php/application/react/.env
