@@ -6,15 +6,15 @@ import hashFunc from "../../Components/password/passwordhash";
 import JoinModal from "../../Components/Modal/JoinModal";
 
 /*
-Customer table구조 
+User구조 
 
 id (int) : 기본키
-email (char) : ID 역할
-password (char) : PASSWORD
+id (char) : ID 역할 (email 형식 // front, back단 둘다 체크 )
+password (char) : Hash PASSWORD
 name (char) : 사용자 이름
 birth (char) : 생년월일
 address (char) : 주소
-
+salt(char) : salt값 
 */
 
 class SignUp extends Component {
@@ -82,7 +82,7 @@ class SignUp extends Component {
     let axiosResult = async () => {
       let b = await axios({
         method: "post",
-        url: "http://localhost:4000/customer/join",
+        url: "http://localhost:80/update_user",
         data: {
           id: this.state.id,
           name: this.state.name,
@@ -111,10 +111,10 @@ class SignUp extends Component {
     // SVGComponentTransferFunctionElement(e.target.value);
   };
   onChangePassword = (e) => {
+    // TODO : password 원하는 게 정규식으로 검사
     this.setState({ password: e.target.value });
   };
   onChangePasswordChk = (e) => {
-    //비밀번호를 입력할때마다 password 를 검증하는 함수
     if (e.target.value !== this.state.password) {
       this.setState({ passwordError: true });
     } else {
