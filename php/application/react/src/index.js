@@ -1,9 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import SignUp from "./pages/SignUp/SignUp";
-import MainMenu from "./pages/MainMenu/MainMenu.js";
-import StoreReg from "./pages/StoreReg/StoreReg.js"
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';

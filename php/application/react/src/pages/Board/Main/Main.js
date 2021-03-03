@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import CustomNavbar from "../../Components/CustomNavbar";
-import HostingBanner from "../../Components/Banner/HostingBanner";
-class Home extends Component {
+import CustomNavbar from "../../../Components/CustomNavbar";
+import HostingBanner from "../../../Components/Banner/HostingBanner";
+class Main extends Component {
   constructor(props) {
     super(props);
   }
@@ -15,4 +15,4 @@ class Home extends Component {
     );
   }
 }
-export default Home;
+export default Main;

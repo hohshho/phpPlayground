@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import ScrollToTopRoute from "./ScrollToTopRoute";
-import homeHosting from "./pages/Home/HomeHosting";
+import Home from "./pages/Home/Home";
 import SignUp from "./pages/SignUp/SignUp";
+import BoardMain from "./pages/Board/Main/Main";
+import BoardWrite from "./pages/Board/Write/Write";
 import Login from "./pages/Login/Login";
-
-import RestaurantInfo from "./Components/info/RestaurantInfo.js";
-import MapMarker from "./Components/map/MapMarker.js";
 import NotFound from "./pages/404";
 /*------ Pages-----*/
 
@@ -32,9 +31,11 @@ class App extends Component {
     return (
       <Router>
         <Switch>
-          <ScrollToTopRoute exact={true} path={"/"} component={homeHosting} />
+          <ScrollToTopRoute exact={true} path={"/"} component={Home} />
           <ScrollToTopRoute exact={true} path={"/signUp"} component={SignUp} />
           <ScrollToTopRoute data={"a"} exact={true} path={"/login"} component={Login} />
+          <ScrollToTopRoute exact={true} path={"/board/main"} component={BoardMain} />
+          <ScrollToTopRoute exact={true} path={"/board/write"} component={BoardWrite} />
           <ScrollToTopRoute component={NotFound} />
           
         </Switch>

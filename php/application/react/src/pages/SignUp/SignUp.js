@@ -2,7 +2,6 @@
 import React, { Component } from "react";
 import "./SignUp.css";
 import axios from "axios";
-import hashFunc from "../../Components/password/passwordhash";
 import JoinModal from "../../Components/Modal/JoinModal";
 
 /*
@@ -29,8 +28,6 @@ class SignUp extends Component {
       address: "",
       passwordError: false,
       termError: false,
-      positionX: "",
-      positionY: "",
       showResults: false,
       message: "",
     };
@@ -58,25 +55,6 @@ class SignUp extends Component {
     if (this.state.password !== this.state.passwordCheck) {
       return this.setState({ passwordError: true });
     }
-    // if (!term) {
-    //   return setTermError(true);
-    // }
-    // Kakao Map API 사용 -> 좌표 저장
-    let geocoder = new kakao.maps.services.Geocoder();
-
-    let callback = (result, status) => {
-      if (status === kakao.maps.services.Status.OK) {
-        this.setState({ positionX: result[0].x });
-        this.setState({ positionY: result[0].y });
-
-        let hashPassword = hashFunc(this.state.password);
-        this.setState({ password: hashPassword });
-
-        return;
-      }
-    };
-
-    let a = await geocoder.addressSearch(this.state.address, await callback);
 
     // TODO : 회원가입 성공 -> modal -> 로그인 창 이동
     let axiosResult = async () => {
@@ -88,9 +66,7 @@ class SignUp extends Component {
           name: this.state.name,
           password: this.state.password,
           birth: this.state.birth,
-          address: this.state.address,
-          positionX: this.state.positionX,
-          positionY: this.state.positionY,
+          address: this.state.address
         },
       });
       return b;
