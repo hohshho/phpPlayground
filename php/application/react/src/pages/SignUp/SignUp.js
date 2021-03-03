@@ -2,7 +2,6 @@
 import React, { Component } from "react";
 import "./SignUp.css";
 import axios from "axios";
-import hashFunc from "../../Components/password/passwordhash";
 import JoinModal from "../../Components/Modal/JoinModal";
 
 /*
@@ -66,7 +65,7 @@ class SignUp extends Component {
           name: this.state.name,
           password: this.state.password,
           birth: this.state.birth,
-          address: this.state.address,
+          address: this.state.address
         },
       });
       return b;

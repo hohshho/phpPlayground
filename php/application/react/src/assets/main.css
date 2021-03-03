@@ -14095,7 +14095,7 @@ p span {
   -ms-flex-pack: center;
   justify-content: center;
   right: 50px;
-  top: -40px;
+  top: 0px;
   background: #fff;
 }
 

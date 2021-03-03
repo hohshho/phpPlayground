@@ -41,7 +41,7 @@ const HostingBanner = () => {
               <p className="wow fadeInUp" data-wow-delay="0.5s">
                 CI3 + SQLite3 + React
               </p>
-              <a href="/order" className="hosting_btn btn_hover wow fadeInUp" data-wow-delay="0.7s">
+              <a href="/board/main" className="hosting_btn btn_hover wow fadeInUp" data-wow-delay="0.7s">
                 게시판 가기
               </a>
             </div>
