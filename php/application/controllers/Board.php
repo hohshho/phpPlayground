@@ -12,13 +12,15 @@
             $this->output->set_content_type('text/html;charset=utf-8');
             $this->output->set_output(json_encode($allUser, JSON_UNESCAPED_UNICODE));
         }
-        // 1. 동일한 아이디가 있나 검색 and ID가 email 형식인지
-        //  1.1) 있으면 false 반환
-        // 2. 없으면 랜덤 key 값 생성
-        //  2.1) 동일한 key값 있는지 확인 있으면 2번 다시
-        // 3. client측으로 부터 전송된 password 값을 통해 1. hash password 생성, 2. random salt 값 생성
-        // 4. db에 저장
-        // 5. 결과값 반환
+        /*
+        1. 동일한 아이디가 있나 검색 and ID가 email 형식인지
+         1.1) 있으면 false 반환
+        2. 없으면 랜덤 key 값 생성
+         2.1) 동일한 key값 있는지 확인 있으면 2번 다시
+        3. client측으로 부터 전송된 password 값을 통해 1. hash password 생성, 2. random salt 값 생성
+        4. db에 저장
+        5. 결과값 반환
+        */
         function sign_up_user() {
             $data = json_decode(file_get_contents("php://input"), true);
             if(!$data){
@@ -67,12 +69,15 @@
             $this->output->set_output($signUpResult);
         }
 
-        // 1. DB에 ID 값을 통한 조회
-        //  1.1) ID 없으면 FALSE 반환
-        // 2. password + db상 salt 값 -> hash password 맞는지 확인
-        //  2.1) 다르면 FALSE 반환
-        //  2.2) 같으면 TRUE 반환
-        // 3. session / cookie 처리
+        /*        
+        1. DB에 ID 값을 통한 조회
+         1.1) ID 없으면 FALSE 반환
+        2. password + db상 salt 값 -> hash password 맞는지 확인
+         2.1) 다르면 FALSE 반환
+         2.2) 같으면 TRUE 반환 // 여기까지 finish
+        3. refreshToken 생성 -> accessToken 생성 -> refreshToken db에 저장 
+        4. refresh token 해야함
+        */
         function login_user(){
             $data = json_decode(file_get_contents("php://input"), true);
             $id = $data['id'];
@@ -88,17 +93,42 @@
             $salt = $queryResult -> salt;
             $uPassword = $queryResult -> password;
             $passVerifyIndex = password_verify($password.$salt, $uPassword);
-            $session_data = array(  
-                'id'=>$id
-            );  
             if($passVerifyIndex){
-                $this->session->set_userdata($session_data);
-                echo $this->session->userdata['userid'];
+                // access token 생성
+                $Token = $this->hashing($id);
+                $this->output->set_content_type('text/html;charset=utf-8');
+                $this->output->set_output($Token);
             }else{
                 echo " 실패지롱";
             }
         }
 
+
+        function hashing($id) {
+            $header = json_encode(array(
+                'alg'=>'sha256',
+                'typ'=>'JWT'
+            ));
+
+            $payload = json_encode(array(
+                'id'=>$id
+            ));
+            $signature = hash("sha256", $header.$payload);
+            return base64_encode($header).'.'.base64_encode($payload).'.'.base64_encode($signature);
+        }
+
+        // access token 검증
+        function dehashing($token)
+        {
+            // 토큰 만들때의 구분자 . 으로 나누기
+            $parted = explode(‘.’, base64_decode($token));
+            $signature = $parted[2];
+            // 위에서 토큰 만들때와 같은 방식으로 시그니처 만들고 비교
+            if(hash($this->alg, $parted[0].$parted[1]) != $signature)
+                return;
+            $payload = json_decode($parted[1],true);
+            return $payload;
+        }
         function isPossibleUserId($id){
             $idPattern = '/^[a-z0-9]{3,20}@[a-z0-9]{3,20}.[a-z0-9]{2,10}$/';
             if(!preg_match_all($idPattern, $id, $matches1)){

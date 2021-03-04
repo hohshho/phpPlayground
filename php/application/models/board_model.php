@@ -22,6 +22,5 @@ class Board_model extends CI_Model {
         $str = $this->db->insert_string('user', $data);
         return $this->db->query($str);
     }
-
     
 }
