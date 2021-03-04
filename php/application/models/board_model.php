@@ -11,7 +11,7 @@ class Board_model extends CI_Model {
     }
 
     function getUserId($id){
-        return $this->db->query("SELECT * FROM USER WHERE id = '".$id."'")->result();
+        return $this->db->query("SELECT * FROM USER WHERE id = '".$id."'")->row();
     }
 
     function getUserKey($key){

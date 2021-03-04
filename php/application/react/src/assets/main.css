@@ -493,6 +493,26 @@ a:hover, a:focus, .btn:hover, .btn:focus, button:hover, button:focus {
 .slider_btn:hover {
   color: #fff;
 }
+.btn_make {
+  font: 500 14px "Poppins", sans-serif;
+  float: right;
+  color: #fff;
+  background: #7444fd;
+  border-radius: 3px;
+  padding: 15px 30px;
+  border: 1px solid #7444fd;
+  margin-bottom : 0px;
+  -webkit-transition: all 0.3s linear;
+  -o-transition: all 0.3s linear;
+  transition: all 0.3s linear;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.btn_make:hover {
+  color: #7444fd;
+  background: transparent;
+}
 
 .btn_three {
   font: 500 14px "Poppins", sans-serif;
@@ -2288,6 +2308,7 @@ a:hover, a:focus, .btn:hover, .btn:focus, button:hover, button:focus {
 
 /*============ sticky menu css ==============*/
 .header_area {
+  background-color: #020230;
   -webkit-transition: all 0.2s linear;
   -o-transition: all 0.2s linear;
   transition: all 0.2s linear;

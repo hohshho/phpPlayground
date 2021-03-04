@@ -27,7 +27,7 @@ class Login extends Component {
     let axiosResult = async () => {
       let b = await axios({
         method: "post",
-        url: "http://localhost:4000/customer/login",
+        url: "http://localhost/board/login_user",
         data: {
           id: this.state.id,
           password: this.state.password,
@@ -36,8 +36,11 @@ class Login extends Component {
       return b;
     };
     axiosRes = await axiosResult();
-    window.sessionStorage.setItem("logged", "true");
-    window.sessionStorage.setItem("accessToken", axiosRes.data.token);
+    // window.sessionStorage.setItem("logged", "true");
+    // window.sessionStorage.setItem("accessToken", axiosRes.data.token);
+    // TODO : 쿠키 저장
+    // TODO : 로그인 성공 / 실패 모달
+    console.log(axiosRes);
     this.props.history.push("/");
   };
   onSubmitSignUp = async (e) => {

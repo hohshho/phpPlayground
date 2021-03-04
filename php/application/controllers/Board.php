@@ -20,9 +20,11 @@
         // 4. db에 저장
         // 5. 결과값 반환
         function sign_up_user() {
-            $data = $_POST;
-            
-            echo implode( '/', $data );;
+            $data = json_decode(file_get_contents("php://input"), true);
+            if(!$data){
+                echo "하....post 값이 없다.";
+            }
+            echo implode( '/', $data );
             $id = $data['id'];
             $name = $data['name'];
             $password = $data['password'];
@@ -36,8 +38,8 @@
                 $userKey = $this->makeUserKey();
             }
             // 3.
-            $salt = password_hash($this->makeRand(), PASSWORD_BCRYPT);
-            $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+            $salt = password_hash($this->makeRandByte(), PASSWORD_BCRYPT);
+            $passwordHash = password_hash($password.$salt, PASSWORD_BCRYPT);
             // 4.
             
             $insertIndex = $salt && $passwordHash && $possibleIdIndex && $userKey ? true : false;
@@ -70,18 +72,31 @@
         // 2. password + db상 salt 값 -> hash password 맞는지 확인
         //  2.1) 다르면 FALSE 반환
         //  2.2) 같으면 TRUE 반환
+        // 3. session / cookie 처리
         function login_user(){
-            $data = $_POST;
+            $data = json_decode(file_get_contents("php://input"), true);
             $id = $data['id'];
             $password = $data['password'];
-
             // 1.
-            $queryResult = checkUserId($id);
+            $queryResult = $this->checkUserId($id);
             if(!$queryResult){
                 $this->output->set_content_type('text/html;charset=utf-8');
                 $this->output->set_output("false");
+                return;
             }
-            // 2.
+            //2.
+            $salt = $queryResult -> salt;
+            $uPassword = $queryResult -> password;
+            $passVerifyIndex = password_verify($password.$salt, $uPassword);
+            $session_data = array(  
+                'id'=>$id
+            );  
+            if($passVerifyIndex){
+                $this->session->set_userdata($session_data);
+                echo $this->session->userdata['userid'];
+            }else{
+                echo " 실패지롱";
+            }
         }
 
         function isPossibleUserId($id){
@@ -113,6 +128,9 @@
         }
 
         function makeRand(){
-            return rand(1,2100000000);
+            return random_int(1,2100000000);
+        }
+        function makeRandByte(){
+            return openssl_random_pseudo_bytes(4);
         }
     }
