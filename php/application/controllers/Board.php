@@ -103,6 +103,14 @@
             }
         }
 
+        function validation(){
+            $data = json_decode(file_get_contents("php://input"), true);
+            $jwt = $data['jwt'];
+
+            $result = $this->dehashing($jwt);
+            $this->output->set_content_type('text/html;charset=utf-8');
+            $this->output->set_output($result);
+        }
 
         function hashing($id) {
             $header = json_encode(array(
@@ -121,14 +129,16 @@
         function dehashing($token)
         {
             // 토큰 만들때의 구분자 . 으로 나누기
-            $parted = explode(‘.’, base64_decode($token));
-            $signature = $parted[2];
+            $parted = explode('.', $token);
+            $signature = base64_decode($parted[2]);
             // 위에서 토큰 만들때와 같은 방식으로 시그니처 만들고 비교
-            if(hash($this->alg, $parted[0].$parted[1]) != $signature)
+            if(hash("sha256", base64_decode($parted[0]).base64_decode($parted[1]))!= $signature){
                 return;
-            $payload = json_decode($parted[1],true);
+            }
+            $payload = "true";
             return $payload;
         }
+
         function isPossibleUserId($id){
             $idPattern = '/^[a-z0-9]{3,20}@[a-z0-9]{3,20}.[a-z0-9]{2,10}$/';
             if(!preg_match_all($idPattern, $id, $matches1)){
