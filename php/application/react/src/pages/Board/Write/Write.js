@@ -22,21 +22,17 @@ class Write extends Component {
   onSubmit = async (e) => {
     e.preventDefault();
     let axiosResult = async () => {
-        let send = await axios({
-          method: "post",
-          url: "http://localhost:80/update_user",
-          data: {
-            id: this.state.id,
-            name: this.state.name,
-            password: this.state.password,
-            birth: this.state.birth,
-            address: this.state.address
-          },
-        });
-        return send;
+      let send = await axios({
+        method: "post",
+        url: "http://localhost/board/ariticle_write",
+        data: {
+          title: this.state.title,
+          content: this.state.content
+        },
+      });
+      return send;
     };
-    // setTimeout(axiosResult, 1800);
-    
+    let result = await axiosResult();
   }
   componentDidMount() {}
   render() {
@@ -65,7 +61,7 @@ class Write extends Component {
             }}
           />
         </div>
-        <button onClick={this.routeChange} className="submit-button">Submit✅</button>
+        <button onClick={this.onSubmit} className="submit-button">Submit✅</button>
       </div>
     );
   }

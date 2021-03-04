@@ -7,6 +7,7 @@ import BoardMain from "./pages/Board/Main/Main";
 import BoardWrite from "./pages/Board/Write/Write";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/404";
+import BoardDetail from "./pages/Board/Detail/Detail";
 /*------ Pages-----*/
 
 // TODO : axios호출 시 jwt 같이 보내야 함. // server는 token 검증하는 로직 필요
@@ -36,6 +37,7 @@ class App extends Component {
           <ScrollToTopRoute data={"a"} exact={true} path={"/login"} component={Login} />
           <ScrollToTopRoute exact={true} path={"/board/main"} component={BoardMain} />
           <ScrollToTopRoute exact={true} path={"/board/write"} component={BoardWrite} />
+          <ScrollToTopRoute exact={true} path={"/board/detail"} component={BoardDetail} />
           <ScrollToTopRoute component={NotFound} />
           
         </Switch>

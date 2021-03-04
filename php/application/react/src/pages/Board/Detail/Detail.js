@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 import CustomNavbar from "../../../Components/CustomNavbar";
-import BoardList from '../../../Components/Board/BoardList'
+import BoardDetail from '../../../Components/Board/BoardDetail'
 
-class Main extends Component {
+class Detail extends Component {
   constructor(props) {
     super(props);
   }
   componentDidMount() {}
   render() {
     return (
-      <div className="body_wrapper">
+      <>
         <CustomNavbar mClass="menu_four hosting_menu" nClass="w_menu" slogo="sticky_logo" />
-        <BoardList/>
-      </div>
+        <BoardDetail/>
+      </>
     );
   }
 }
-export default Main;
+export default Detail;

@@ -4,18 +4,6 @@ import "./SignUp.css";
 import axios from "axios";
 import JoinModal from "../../Components/Modal/JoinModal";
 
-/*
-User구조 
-
-id (int) : 기본키
-id (char) : ID 역할 (email 형식 // front, back단 둘다 체크 )
-password (char) : Hash PASSWORD
-name (char) : 사용자 이름
-birth (char) : 생년월일
-address (char) : 주소
-salt(char) : salt값 
-*/
-
 class SignUp extends Component {
   constructor(props) {
     super(props);
@@ -30,32 +18,45 @@ class SignUp extends Component {
       termError: false,
       showResults: false,
       message: "",
+      successJoin : false
     };
   }
   // TODO : state 값 입력받을 때 정해진 유형에 맞지 않으면 password처럼 떠야함
-  chageMessage = () => {
-    let str = this.state.name + "님의 아이디는 " + this.state.id + "입니다. \n ";
+  chageMessage = (index) => {
+    let str;
+    if(index){
+      str = this.state.name + "님의 아이디는 " + this.state.id + "입니다. \n ";
+      this.setState({ successJoin: false });
+    }else {
+      str ="회원 가입에 실패하셨습니다. 다시 회원가입 해주세요!";
+    }
     this.setState({ message: str });
   };
+
   routeChange = () => {
-    this.props.history.push("/login");
+    if(this.state.successJoin){
+      this.props.history.push("/login");
+    }else {
+      this.props.history.push("/signup");
+      // TODO : url에 값이 남아있네 없애줘야 한다.
+    }
   };
-  openModal = async (e) => {
-    let changeMessage = await this.chageMessage();
-    // TODO : 회원가입 성공 / 실패 구분해서 MODAL 띄워줘야 함
+
+  successModal = async (e) => {
+    let changeMessage = await this.chageMessage(true);
+    let changeModal = await this.setState({ showResults: true });
+  };
+
+  failModal = async (e) => {
+    let changeMessage = await this.chageMessage(false);
     let changeModal = await this.setState({ showResults: true });
   };
 
   onSubmit = async (e) => {
     e.preventDefault();
-    /**검증 로직 만들기
-     * 1. 비밀번호와 비밀번호 체크가 다를 경우를 검증한다
-     * 2. 약관 동의를 확인한다.
-     */
     if (this.state.password !== this.state.passwordCheck) {
       return this.setState({ passwordError: true });
     }
-    // TODO : 회원가입 성공 -> modal -> 로그인 창 이동
     let axiosResult = async () => {
       let b = await axios({
         method: "post",
@@ -71,10 +72,12 @@ class SignUp extends Component {
       return b;
     };
 
-    setTimeout(axiosResult, 1800);
-    setTimeout(this.openModal, 3000);
-    // TODO : 1. 회원가입 성공/실패 값 return 해줘야 한다.
-    // TODO : 2. 성공 시랑 실패시 값이 걸리는 시간이 다른데 맞춰서 처리해줘야 함
+    let axiosIndex = await axiosResult();
+    if(axiosIndex.data==true){
+      this.successModal();
+    }else{
+      this.failModal();
+    }
     return;
   };
 
@@ -83,7 +86,6 @@ class SignUp extends Component {
   };
   onChangeName = (e) => {
     this.setState({ name: e.target.value });
-    // SVGComponentTransferFunctionElement(e.target.value);
   };
   onChangePassword = (e) => {
     // TODO : password 원하는 게 정규식으로 검사
@@ -102,15 +104,9 @@ class SignUp extends Component {
   };
 
   onChangeAddress = (e) => {
-    // setTermError(false);
     this.setState({ address: e.target.value });
   };
 
-  //   onChangeTerm = (e) => {
-  //     //체크박스 초기화
-  //     setTermError(false);
-  //     setTerm(e.target.checked);
-  //   };
   componentDidMount() {}
 
   render() {
@@ -235,7 +231,7 @@ class SignUp extends Component {
               title="환영합니다! "
               message={this.state.message}
               submit={this.routeChange}
-              confirm="로그인창으로 이동"
+              confirm={this.state.successJoin ==true ? "로그인창으로 이동":"회원가입창으로 이동"}
             />
           ) : null}
         </form>

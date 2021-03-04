@@ -26,7 +26,7 @@
             if(!$data){
                 echo "하....post 값이 없다.";
             }
-            echo implode( '/', $data );
+            // echo implode( '/', $data );
             $id = $data['id'];
             $name = $data['name'];
             $password = $data['password'];
@@ -103,12 +103,23 @@
             }
         }
 
+        function ariticle_write(){
+            $data = json_decode(file_get_contents("php://input"), true);
+            $title = $data['title'];
+            $content = $data['content'];
+            echo $title;
+            echo $content;
+        }
+
+        // --------------------함수--------------------
         function validation(){
             $data = json_decode(file_get_contents("php://input"), true);
             $jwt = $data['jwt'];
 
             $result = $this->dehashing($jwt);
             $this->output->set_content_type('text/html;charset=utf-8');
+            // TODO : accessToken에 시간 값 추가
+            // TODO : refreshToken 만들고 db에 저장
             $this->output->set_output($result);
         }
 

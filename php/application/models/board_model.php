@@ -23,4 +23,9 @@ class Board_model extends CI_Model {
         return $this->db->query($str);
     }
     
+    function insert_article($data){
+        $str = $this->db->insert_string('article', $data);
+        return $this->db->query($str);
+    }
+
 }
