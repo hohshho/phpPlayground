@@ -28,4 +28,11 @@ class Board_model extends CI_Model {
         return $this->db->query($str);
     }
 
+    function getArticleKey($key){
+        return $this->db->query("SELECT * FROM ARTICLE WHERE articlekey = ".$key)->result();
+    }
+
+    function getBoardList10Items(){
+        return $this->db->query("");
+    }
 }

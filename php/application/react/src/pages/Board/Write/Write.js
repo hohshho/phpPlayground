@@ -24,10 +24,11 @@ class Write extends Component {
     let axiosResult = async () => {
       let send = await axios({
         method: "post",
-        url: "http://localhost/board/ariticle_write",
+        url: "http://localhost/board/article_write",
         data: {
           title: this.state.title,
-          content: this.state.content
+          content: this.state.content,
+          accessToken: window.sessionStorage.getItem("accessToken")
         },
       });
       return send;

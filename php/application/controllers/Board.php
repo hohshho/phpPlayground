@@ -103,15 +103,59 @@
             }
         }
 
-        function ariticle_write(){
+        function article_write(){
             $data = json_decode(file_get_contents("php://input"), true);
+            $accessToken = $data['accessToken'];
             $title = $data['title'];
             $content = $data['content'];
-            echo $title;
-            echo $content;
+            $time = date('Y-m-d H:i:s');
+            $userid = $this->getUserId($accessToken);
+
+            $articlekey = $this->makeArticleKey();
+
+            // 검증 로직
+            $isPossibleUser = $this->dehashing($accessToken);
+            if(!$isPossibleUser){
+                $this->output->set_content_type('text/html;charset=utf-8');
+                $this->output->set_output("false");
+                return;
+            }
+            // 저장로직
+            $isSuccessSave = $this->board_model->insert_article(array(
+                'articleKey' => $articlekey,
+                'title' => $title,
+                'contents' => $content,
+                'time' => $time,
+                'user_id' => $userid
+            ));
+
+            if($isSuccessSave){
+                $this->output->set_content_type('text/html;charset=utf-8');
+                $this->output->set_output("true");
+            }else{
+                $this->output->set_content_type('text/html;charset=utf-8');
+                $this->output->set_output("false");
+            }
+            // 저장 결과 반환 true or false
+        }
+
+        function board_list(){
+            // 1. db에서 값 꺼내오기
+
+            // 2. serverdata형식에 맞춰서 배열 안에 json형태로 만들기
+
+            // 3. json type으로 return
         }
 
         // --------------------함수--------------------
+        function makeArticleKey(){
+            $key = $this->makeRand();
+            if($this->board_model->getArticleKey($key)) {
+                $key = makeUserKey();
+            }
+            return $key;
+        }
+
         function validation(){
             $data = json_decode(file_get_contents("php://input"), true);
             $jwt = $data['jwt'];
@@ -128,9 +172,10 @@
                 'alg'=>'sha256',
                 'typ'=>'JWT'
             ));
-
+            // TODO : time에 현재값 넣어놨는데 +30분 한 값 넣어야함
             $payload = json_encode(array(
-                'id'=>$id
+                'id'=>$id,
+                'time'=> date('Y-m-d H:i:s')
             ));
             $signature = hash("sha256", $header.$payload);
             return base64_encode($header).'.'.base64_encode($payload).'.'.base64_encode($signature);
@@ -146,8 +191,14 @@
             if(hash("sha256", base64_decode($parted[0]).base64_decode($parted[1]))!= $signature){
                 return;
             }
-            $payload = "true";
-            return $payload;
+            return true;
+        }
+
+        function getUserId($accessToken){
+            $parted = explode('.', $accessToken);
+            $payload = base64_decode($parted[1]);
+            $payload = substr($payload, 0, -31);
+            return substr($payload, 7);
         }
 
         function isPossibleUserId($id){

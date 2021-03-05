@@ -3,6 +3,9 @@ import "./Login.css";
 import axios from "axios";
 import { WithRouter } from "react-router-dom";
 import App from "../../App";
+
+import cookie from 'react-cookies';
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -39,9 +42,16 @@ class Login extends Component {
     window.sessionStorage.setItem("logged", "true");
     window.sessionStorage.setItem("accessToken", axiosRes.data);
     console.log(axiosRes);
-    // TODO : 쿠키 저장
     // TODO : 로그인 성공 / 실패 모달
-    console.log(axiosRes);
+    if(axiosRes.data){
+      cookie.save('accessToken', axiosRes.data,{
+        path:"/",
+        httpOnly:true
+      })
+      console.log('토큰 저장 완료!');
+    }else{
+      console.log('로그인은 됐는데 토큰 저장이 안되요 ㅜㅜ')
+    }
     this.props.history.push("/");
   };
   onSubmitSignUp = async (e) => {

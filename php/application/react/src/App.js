@@ -17,11 +17,11 @@ class App extends Component {
     this.state = {
       payAmount : 0
     }
-    window.sessionStorage.setItem("logged", "false");
-    if (window.sessionStorage.getItem("accessToken")) {
+    // window.sessionStorage.setItem("logged", "false");
+    // if (window.sessionStorage.getItem("accessToken")) {
       // TODO : accessToken보고 로그인 만료시간 끝나지 않았으면 TRUE
-      window.sessionStorage.setItem("logged", "true");
-    }
+    //   window.sessionStorage.setItem("logged", "true");
+    // }
   }
 
   componentDidMount() {
@@ -39,7 +39,6 @@ class App extends Component {
           <ScrollToTopRoute exact={true} path={"/board/write"} component={BoardWrite} />
           <ScrollToTopRoute exact={true} path={"/board/detail"} component={BoardDetail} />
           <ScrollToTopRoute component={NotFound} />
-          
         </Switch>
       </Router>
     );
