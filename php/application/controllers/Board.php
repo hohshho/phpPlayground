@@ -141,9 +141,12 @@
 
         function board_list(){
             // 1. db에서 값 꺼내오기
-
+            $listIndex = (int) $_GET['listIndex'] -1; // 0번째 부터 시작해서
+            $listData = $this->board_model->getBoardList10Items($listIndex*10);
             // 2. serverdata형식에 맞춰서 배열 안에 json형태로 만들기
-
+            
+            $this->output->set_content_type('application/json;charset=utf-8');
+            $this->output->set_output(json_encode($listData, JSON_UNESCAPED_UNICODE));
             // 3. json type으로 return
         }
 

@@ -32,7 +32,8 @@ class Board_model extends CI_Model {
         return $this->db->query("SELECT * FROM ARTICLE WHERE articlekey = ".$key)->result();
     }
 
-    function getBoardList10Items(){
-        return $this->db->query("");
+    function getBoardList10Items($listIndex){
+        // TODO : 목록 구현할 때 1. query 수정 limit 1,2;/ 2. controller 장난 질
+        return $this->db->query("select * from article order by time DESC limit ".$listIndex.",10")->result_array();
     }
 }

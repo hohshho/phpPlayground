@@ -15,9 +15,6 @@ foreach($read_file as $line){
 		"line_department_name" => $line_department_name, 
 		"line_department_code" => $line_department_code
    	];
-//	foreach( $arr[$line_parent_code] as $key => $value ) {
-//		$sort[$key] = $value['sort_order'];
-//	}
 	$sort = array_column($arr[$line_parent_code],'sort_order');
 	array_multisort($sort, SORT_ASC, $arr[$line_parent_code]);
 }

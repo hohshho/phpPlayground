@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 class BoardListItem extends Component{
+    constructor(props) {
+        super(props);
+    }
+    componentDidMount() {}
     render(){
         let ServiceData = this.props.ServiceData;
         return(
